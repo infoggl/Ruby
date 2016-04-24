@@ -1,21 +1,30 @@
+class Check # This class checks whether there is already a data.txt file.
+	begin
+		File.read('data.txt')
+	rescue
+		initial_data = "{}"	
+		File.write('data.txt',initial_data) # A new data.txt file will be created if there is no file already.
+	end
+end
+
 class Dictionary
 
 DICTIONARY_HASH = eval(File.read('data.txt'))	# This gets Ruby to check inside the file for anything it can interperet. It sees that there is a hash stored as a string.
 
 	def save_dictionary
-			File.write('data.txt',DICTIONARY_HASH)
-			puts "   Saved to disk","" 
-	end
-	
-	def welcome_message
-		puts "","   Welcome to the Dictionary."
+		puts "","This is the data in memory: ", DICTIONARY_HASH,"",""
+		File.write('data.txt',DICTIONARY_HASH)
+		puts "   Saved to disk","" 
 	end
 		
+	def welcome_message
+		puts "","   Welcome to the Dictionary."
+	end		
 		
 	def home_screen
 		puts "   Please select from the following choices:",""
 		sleep(0.8)
-		puts"   Press F and Enter to Find a word.","   Press N and Enter to enter a New definition.","   Press B and Enter to Browse the entire dictionary.","   Press E and Enter to Exit the program.","   Press R and Enter to Resave data.",""
+		puts"   Press F and then [Enter] to Find a word.","   Press N and then [Enter] to enter a New definition.","   Press B and then [Enter] to Browse the entire dictionary.","   Press E and then [Enter] to Exit and Save.","   Press S and then [Enter] to Save and continue.",""
 		menu_item = gets.chomp.upcase
 		if menu_item == "F"		
 			D.find
@@ -25,7 +34,7 @@ DICTIONARY_HASH = eval(File.read('data.txt'))	# This gets Ruby to check inside t
 			D.browse
 		elsif menu_item == "E"
 			puts "","   Exiting"
-		elsif menu_item == "R"
+		elsif menu_item == "S"
 			D.save_dictionary			
 			D.home_screen
 		else 
@@ -35,12 +44,13 @@ DICTIONARY_HASH = eval(File.read('data.txt'))	# This gets Ruby to check inside t
 	end
 	
 	def find
-		puts "","   This is the Find function.","   Please type in an acronym or word and press Enter.",""
+		puts "","   This is the Find function.","   Please type in an acronym or word and then press [Enter].",""
 		find_term = gets.chomp.upcase
 		
 		if DICTIONARY_HASH[find_term] != nil
 			puts "","   Results for #{find_term}: #{DICTIONARY_HASH[find_term]}",""
 			D.home_screen
+			sleep(3)
 		else
 			puts "","   #{find_term} is not in the dictionary. Let's start over.",""
 			D.home_screen
@@ -48,7 +58,7 @@ DICTIONARY_HASH = eval(File.read('data.txt'))	# This gets Ruby to check inside t
 	end	
 	
 	def new_entry
-		puts "","   Please type a word and press Enter.",""
+		puts "","   Please type a word and then press [Enter].",""
 		new_word = gets.chomp.upcase
 		puts "","   Thanks. You typed: #{new_word}"
 		
@@ -64,11 +74,12 @@ DICTIONARY_HASH = eval(File.read('data.txt'))	# This gets Ruby to check inside t
 	
 	def browse
 		puts "","   This is the contents of the dictionary:",""
-		puts DICTIONARY_HASH
+		puts DICTIONARY_HASH,""
+		D.home_screen
 	end
 
 	def finalize
-		puts "   To enter more, press Y then press Enter. Otherwise just press Enter.",""
+		puts "   To enter more, press Y then press [Enter]. Otherwise just press [Enter].",""
 		user_choice = gets.chomp.upcase
 		if user_choice == "Y"
 			D.new_entry
@@ -80,8 +91,8 @@ DICTIONARY_HASH = eval(File.read('data.txt'))	# This gets Ruby to check inside t
 	
 	
 	D = Dictionary.new
-	D.welcome_message
+	D.welcome_message	
 	D.home_screen	
 	D.save_dictionary
-	#sleep(2)
+
 end
